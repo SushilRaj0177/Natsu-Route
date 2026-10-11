@@ -16,6 +16,12 @@ export interface RaptorQuery {
   allowSurcharge: boolean;
   /** Extra seconds needed to change trains at the same stop. */
   minChangeSec: number;
+  /**
+   * Door-to-door search: the walks to the first stop and from the last are
+   * done on the street network, so journeys start and end with a ride
+   * (walking links are only used between rides).
+   */
+  ridesAtEnds?: boolean;
 }
 
 export type RaptorLeg =
@@ -64,16 +70,16 @@ export function raptor(tt: Timetable, q: RaptorQuery): RaptorJourney[] {
       marked.push(s);
     }
   };
-  const improve = (k: number, s: number, t: number) => {
+  const improve = (k: number, s: number, t: number, byRide: boolean) => {
     label[k * n + s] = t;
     best[s] = t;
     bestRound[s] = k;
-    if (extra[s] !== INF && t + extra[s] < targetBest) targetBest = t + extra[s];
+    if (extra[s] !== INF && (byRide || !q.ridesAtEnds) && t + extra[s] < targetBest) targetBest = t + extra[s];
   };
 
   for (const { stop, time } of q.sources) {
     if (time < best[stop]) {
-      improve(0, stop, time);
+      improve(0, stop, time, false);
       kind[stop] = SOURCE;
       mark(stop);
     }
@@ -85,7 +91,7 @@ export function raptor(tt: Timetable, q: RaptorQuery): RaptorJourney[] {
         const to = tt.footTo[f];
         const t = base + tt.footSec[f];
         if (t < best[to] && t < targetBest) {
-          improve(k, to, t);
+          improve(k, to, t, false);
           kind[k * n + to] = WALK;
           pFrom[k * n + to] = s;
           mark(to);
@@ -93,7 +99,7 @@ export function raptor(tt: Timetable, q: RaptorQuery): RaptorJourney[] {
       }
     }
   };
-  walkFrom(0, [...marked]);
+  if (!q.ridesAtEnds) walkFrom(0, [...marked]);
 
   const routeFrom = new Int32Array(tt.nRoutes).fill(-1);
   for (let k = 1; k <= K && marked.length; k++) {
@@ -128,7 +134,7 @@ export function raptor(tt: Timetable, q: RaptorQuery): RaptorJourney[] {
         if (trip >= 0) {
           const a = tt.arr[tBase + trip * len + i];
           if (a < best[s] && a < targetBest) {
-            improve(k, s, a);
+            improve(k, s, a, true);
             const idx = k * n + s;
             kind[idx] = RIDE;
             pRoute[idx] = r;
@@ -171,6 +177,7 @@ export function raptor(tt: Timetable, q: RaptorQuery): RaptorJourney[] {
     let at = -1;
     for (const t of q.targets) {
       const v = label[k * n + t.stop];
+      if (q.ridesAtEnds && kind[k * n + t.stop] !== RIDE) continue;
       if (v !== INF && v + t.extra < arr) {
         arr = v + t.extra;
         at = t.stop;

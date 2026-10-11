@@ -365,3 +365,44 @@ function finish(steps: WalkStep[], g: WalkGraph): Walk {
   }
   return { steps, time, sun, unknown, open, cost, metres };
 }
+
+/**
+ * Cost, time and sun to reach a point partway along an edge, from a
+ * finished search, without rebuilding the path.
+ */
+export function labelAtSnap(g: WalkGraph, x: ExposureModel, tree: WalkTree, target: Snap): { cost: number; time: number; sun: number; unknown: number } | null {
+  const e = target.edge;
+  const len = g.d.length[e];
+  let best: { cost: number; time: number; sun: number; unknown: number } | null = null;
+  for (const [node, share, fwdIntoTarget] of [
+    [g.d.u[e], len > 0 ? target.along / len : 0, true],
+    [g.d.v[e], len > 0 ? 1 - target.along / len : 0, false],
+  ] as const) {
+    if (!Number.isFinite(tree.cost[node])) continue;
+    const b = sunBucket(tree.startMs + tree.direction * tree.time[node] * 1000);
+    const c = stepCost(g, x, e, share, b, tree.prefs, tree.direction === 1 ? fwdIntoTarget : !fwdIntoTarget);
+    if (!c) continue;
+    const cost = tree.cost[node] + c.cost;
+    if (!best || cost < best.cost) best = { cost, time: tree.time[node] + c.time, sun: tree.sun[node] + c.sun, unknown: tree.unknown[node] + c.unknown };
+  }
+  if (e === tree.origin.edge) {
+    const len0 = g.d.length[e];
+    const share = len0 > 0 ? Math.abs(target.along - tree.origin.along) / len0 : 0;
+    const fwdPath = target.along >= tree.origin.along;
+    const c = stepCost(g, x, e, share, sunBucket(tree.startMs), tree.prefs, tree.direction === 1 ? fwdPath : !fwdPath);
+    if (c && (!best || c.cost < best.cost)) best = { cost: c.cost, time: c.time, sun: c.sun, unknown: c.unknown };
+  }
+  return best;
+}
+
+/** The same path walked starting at another moment: shade follows the sun. */
+export function recost(g: WalkGraph, x: ExposureModel, w: Walk, startMs: number, prefs: WalkPrefs): Walk {
+  const steps: WalkStep[] = [];
+  let t = 0;
+  for (const s of w.steps) {
+    const c = stepCost(g, x, s.edge, s.share, sunBucket(startMs + t * 1000), prefs, s.forward) ?? s.cost;
+    steps.push({ ...s, cost: c, at: t });
+    t += c.time;
+  }
+  return finish(steps, g);
+}
