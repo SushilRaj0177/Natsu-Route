@@ -443,9 +443,11 @@ def save_trees(trees, tree_rows, woods):
 
 
 def shapely_to_xy(g):
-    from shapely.ops import transform
+    import shapely
 
-    return transform(lambda lon, lat, z=None: to_xy(lon, lat), g)
+    from proj import LAT0, LON0, M_PER_DEG_LAT, M_PER_DEG_LON
+
+    return shapely.transform(g, lambda c: np.column_stack(((c[:, 0] - LON0) * M_PER_DEG_LON, (c[:, 1] - LAT0) * M_PER_DEG_LAT)))
 
 
 def save_wards(ward_polys):
