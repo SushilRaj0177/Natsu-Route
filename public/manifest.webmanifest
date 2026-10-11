@@ -1,0 +1,16 @@
+{
+  "name": "NatsuRoute（なつルート）",
+  "short_name": "なつルート",
+  "description": "暑い日に、日なたを歩く時間がいちばん短くなる電車・バスの道順。",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbf8f2",
+  "theme_color": "#0f5b63",
+  "lang": "ja",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
