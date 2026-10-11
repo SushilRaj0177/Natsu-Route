@@ -15,6 +15,8 @@ export function segmentText(s: WalkSegment, i: I18n, pref: Preference, first: bo
   if (s.stairs) extras.push(t('stairsStep'));
   if (s.elevator) extras.push(t('elevator'));
   if (s.escalator) extras.push(t('escalator'));
+  if (s.steep) extras.push(t('steep'));
+  if (s.kerb) extras.push(t('kerb'));
   if (s.signals) extras.push(t('signals', { n: s.signals }));
   if (!s.shelter) extras.push(shadeWord(s, i));
   // A few metres of stairs or a lift is a step, not a distance.

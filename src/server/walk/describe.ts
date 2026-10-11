@@ -1,7 +1,7 @@
 import type { Names } from '../../shared/network.ts';
 import type { WalkSegment } from '../../shared/api.ts';
 import { toLonLat } from '../../shared/proj.ts';
-import { F_ELEVATOR, F_ESCALATOR, F_INDOOR, F_SHELTERED, F_STEPS, F_UNDERGROUND, type WalkGraph } from './graph.ts';
+import { F_ELEVATOR, F_ESCALATOR, F_INDOOR, F_KERB, F_SHELTERED, F_STEEP, F_STEPS, F_UNDERGROUND, type WalkGraph } from './graph.ts';
 import type { Walk, WalkStep } from './search.ts';
 
 /**
@@ -42,6 +42,8 @@ export function describeWalk(g: WalkGraph, w: Walk, streetNames: { ja: string; e
       last.seconds = t;
       last.sunSeconds += s.cost.sun;
       if (last.side === 'either') last.side = s.cost.side;
+      if (flags & F_STEEP) last.steep = true;
+      if (flags & F_KERB) last.kerb = true;
       last.signals = (last.signals ?? 0) + g.d.signals[s.edge] * s.share || undefined;
       last.line.push(...lonlat.slice(1));
       continue;
@@ -56,6 +58,8 @@ export function describeWalk(g: WalkGraph, w: Walk, streetNames: { ja: string; e
       stairs: flags & F_STEPS ? true : undefined,
       escalator: flags & F_ESCALATOR ? true : undefined,
       elevator: flags & F_ELEVATOR ? true : undefined,
+      steep: flags & F_STEEP ? true : undefined,
+      kerb: flags & F_KERB ? true : undefined,
       signals: g.d.signals[s.edge] ? Math.round(g.d.signals[s.edge] * s.share) || undefined : undefined,
       turn,
       sun: sunShare,

@@ -213,6 +213,8 @@ const STRINGS = {
   stairsStep: { ja: '階段', en: 'stairs' },
   elevator: { ja: 'エレベーター', en: 'lift' },
   escalator: { ja: 'エスカレーター', en: 'escalator' },
+  steep: { ja: '坂あり', en: 'slope' },
+  kerb: { ja: '段差あり', en: 'kerb' },
   signals: { ja: '信号 {n}', en: '{n} crossing(s)' },
   sunny: { ja: '日なた', en: 'sunny' },
   shady: { ja: '日陰', en: 'shady' },

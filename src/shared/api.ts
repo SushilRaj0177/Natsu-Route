@@ -68,6 +68,10 @@ export interface WalkSegment {
   stairs?: boolean;
   escalator?: boolean;
   elevator?: boolean;
+  /** Slope over 5 % (MLIT walking-space data). */
+  steep?: boolean;
+  /** A kerb or step over 2 cm (MLIT walking-space data). */
+  kerb?: boolean;
   /** Signalised crossings along it (a wait in the open). */
   signals?: number;
   /** Turn to make at the start of this segment. */

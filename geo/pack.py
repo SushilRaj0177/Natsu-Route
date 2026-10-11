@@ -2,8 +2,8 @@
 
     python3 geo/pack.py
 
-Reads geo/out/{plateau/*.npz, osm/*} (and geo/out/shelters.json,
-geo/out/hokonavi.npz when present) and writes data/build/geo/:
+Reads geo/out/{plateau/*.npz, osm/*} (with the Hokonavi-merged network and
+geo/out/shelters.json when present) and writes data/build/geo/:
 
 * casters.pack  every shade caster: buildings, tree crowns, decks, roofs
 * walk.pack     the walking network
@@ -100,14 +100,14 @@ def pack_casters():
 
 
 def pack_walk():
-    d = np.load(os.path.join(HERE, "out", "osm", "walk.npz"))
+    # The network with MLIT's walking-space data merged in, when it has been built.
+    merged = os.path.join(HERE, "out", "osm", "walk-hokonavi.npz")
+    d = np.load(merged if os.path.exists(merged) else os.path.join(HERE, "out", "osm", "walk.npz"))
     arrays = {k: d[k] for k in d.files}
-    hk = os.path.join(HERE, "out", "hokonavi.npz")
     meta = {"nodes": int(len(arrays["node_xy"])), "edges": int(len(arrays["u"]))}
-    if os.path.exists(hk):
-        h = np.load(hk)
-        arrays["flags"] = h["flags"].astype(np.uint16)
-        meta["hokonavi"] = {k: int(v) for k, v in json.load(open(os.path.join(HERE, "out", "hokonavi.json"))).items()}
+    hk = os.path.join(HERE, "out", "hokonavi.json")
+    if os.path.exists(merged) and os.path.exists(hk):
+        meta["hokonavi"] = json.load(open(hk))
     write_pack(os.path.join(OUT, "walk.pack"), arrays, meta)
     shutil.copy(os.path.join(HERE, "out", "osm", "names.json"), os.path.join(OUT, "street-names.json"))
     print("walk:", meta, flush=True)

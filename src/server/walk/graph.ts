@@ -15,6 +15,10 @@ export const F_BRIDGE = 1 << 10;
 export const F_TUNNEL = 1 << 11;
 export const F_RAMP = 1 << 12;
 export const F_NO_SIDEWALK = 1 << 13;
+/** From MLIT's walking-space data: slope over 5 %. */
+export const F_STEEP = 1 << 14;
+/** From MLIT's walking-space data: a step or kerb over 2 cm. */
+export const F_KERB = 1 << 15;
 /** Anything overhead that keeps off sun and rain. */
 export const F_SHELTERED = F_COVERED | F_INDOOR | F_UNDERGROUND;
 

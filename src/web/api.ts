@@ -34,7 +34,7 @@ export interface ReplayDay {
 export interface AboutResponse {
   data: { builtAt: string; timetableIssued: string; geoBuiltAt?: string };
   shade: { count?: number; byKind?: Record<string, number>; byWard?: Record<string, number> };
-  walk: { nodes?: number; edges?: number };
+  walk: { nodes?: number; edges?: number; hokonavi?: { areas: number; links: number; matched: number; added: number } };
   transit: { stations: number; busStops: number; railTrips: number; busTrips: number; busRoutes: number; entrances: number; stationsWithEntrances: number };
   pois: Record<string, number>;
   operators: { name: Names; licence: string; bus: boolean; silver: boolean; fares: boolean }[];

@@ -1,4 +1,4 @@
-import { F_ELEVATOR, F_ESCALATOR, F_SHELTERED, F_STEPS, type Snap, type WalkGraph } from './graph.ts';
+import { F_ELEVATOR, F_ESCALATOR, F_KERB, F_SHELTERED, F_STEEP, F_STEPS, type Snap, type WalkGraph } from './graph.ts';
 import { sunBucket, type EdgeShade, type ExposureModel, type SunBucket } from './exposure.ts';
 
 /**
@@ -60,7 +60,11 @@ export function stepCost(g: WalkGraph, x: ExposureModel, e: number, share: numbe
     walk = len / 0.5;
   } else {
     walk = len / p.speed;
+    // Slopes over 5 % slow everyone, and older walkers more.
+    if (flags & F_STEEP) walk *= p.speed < 1 ? 1.3 : 1.15;
   }
+  // A kerb or step over 2 cm: avoid it for someone who cannot use stairs.
+  if (flags & F_KERB && p.stairs === 'never') penalty += 60;
   let wait = 0;
   if (flags & F_ELEVATOR) wait += LIFT_TIME * share;
   const signals = d.signals[e] * share;

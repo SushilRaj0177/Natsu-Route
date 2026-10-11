@@ -69,7 +69,11 @@ export function AboutView() {
         <dt>{ja ? '歩行者の道' : 'Walking network'}</dt>
         <dd>
           © OpenStreetMap contributors（ODbL）: {n(a?.walk.edges, lang)} {ja ? '区間' : 'segments'}
-          {ja ? '・歩行空間ネットワークデータ（国土交通省 ほこナビDP）の仕様に沿った段差・屋根の情報' : ''}
+          <br />
+          {ja ? '歩行空間ネットワークデータ（国土交通省 ほこナビDP、公共データ利用規約）' : 'MLIT walking-space network data (Hokonavi DP)'}: {n(a?.walk.hokonavi?.areas, lang)}
+          {ja ? '地区・' : ' areas, '}
+          {n(a?.walk.hokonavi?.links, lang)}
+          {ja ? 'リンク。屋根・地下通路・建物内通路・階段・エレベーター・坂・段差を道に反映' : ' links: roofs, underground passages, corridors, stairs, lifts, slopes and kerbs'}
         </dd>
         <dt>{ja ? '電車・バスの時刻表と運賃' : 'Train and bus timetables, fares'}</dt>
         <dd>

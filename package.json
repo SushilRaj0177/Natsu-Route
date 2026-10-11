@@ -14,7 +14,7 @@
     "data:verify": "tsx pipeline/verify.ts",
     "data:replay": "tsx pipeline/heat-replay.ts",
     "data": "npm run data:fetch && npm run data:build && npm run data:replay",
-    "geo": "python3 geo/plateau.py && python3 geo/osm.py && python3 geo/pack.py",
+    "geo": "python3 geo/plateau.py && python3 geo/osm.py && python3 geo/hokonavi.py && python3 geo/shelters.py && python3 geo/pack.py",
     "dev": "concurrently -k -n api,web -c blue,magenta \"npm:dev:api\" \"npm:dev:web\"",
     "dev:api": "tsx watch src/server/main.ts",
     "dev:web": "vite",
