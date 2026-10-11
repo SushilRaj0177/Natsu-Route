@@ -1106,6 +1106,10 @@ a {
   padding-top: 0.3rem;
   min-width: 0;
 }
+.walk-map {
+  display: flex;
+  margin: 0.15rem 0;
+}
 .walk-sum {
   display: flex;
   flex-wrap: wrap;

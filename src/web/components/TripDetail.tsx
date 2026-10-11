@@ -197,6 +197,19 @@ function WalkItem({ leg: l, preference, onFocusPoint }: { leg: WalkLeg; preferen
       </span>
       <div className="tl-body">
         <strong>{t('walkTo', { place: name(l.to) })}</strong>
+        {onFocusPoint && l.segments.length > 0 && (
+          <button
+            type="button"
+            className="link small walk-map"
+            onClick={() => {
+              const pts = l.segments.flatMap((s) => s.line);
+              const mid = pts[Math.floor(pts.length / 2)];
+              onFocusPoint(mid[1], mid[0]);
+            }}
+          >
+            <Icon name="map" size={18} /> {t('walkOnMap')}
+          </button>
+        )}
         <p className="walk-sum">
           {t('walkMinutes', { min: minutes(l.seconds, lang), m: metres(l.metres, lang) })}
           {preference === 'cool' && (

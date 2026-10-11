@@ -1,0 +1,9 @@
+node_modules
+dist
+data
+geo/out
+geo/__pycache__
+.env
+.git
+test-results
+playwright-report

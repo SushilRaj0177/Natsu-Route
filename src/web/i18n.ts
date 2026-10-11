@@ -179,6 +179,7 @@ const STRINGS = {
   bestTimeLoading: { ja: '時間ごとに計算しています（10秒ほど）…', en: 'Working it out for each time (about 10 s)…' },
   pickThisTime: { ja: 'この時間で調べる', en: 'Plan for this time' },
   showMap: { ja: '地図で見る', en: 'Show map' },
+  walkOnMap: { ja: 'この道を地図で見る', en: 'See this walk on the map' },
   showList: { ja: '道順を見る', en: 'Show steps' },
   back: { ja: 'もどる', en: 'Back' },
   details: { ja: 'くわしく見る', en: 'See the steps' },
