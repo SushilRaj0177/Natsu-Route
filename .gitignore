@@ -1,0 +1,14 @@
+node_modules/
+dist/
+# Raw downloads and everything built from them. ODPT Challenge 2026 data is
+# licensed for the Challenge entry only (no redistribution), so none of it is
+# ever committed. The geo outputs are large and rebuilt by `npm run geo`.
+data/
+geo/out/
+.env
+__pycache__/
+*.pyc
+test-results/
+playwright-report/
+*.log
+.DS_Store
