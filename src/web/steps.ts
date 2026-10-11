@@ -3,7 +3,7 @@ import { clock, metres, minutes } from './format.ts';
 import type { I18n, Key } from './i18n.ts';
 
 /** One walking instruction in words: "左に曲がり、地蔵通りを右側の歩道（日陰）で70m". */
-export function segmentText(s: WalkSegment, i: I18n, pref: Preference, first: boolean): string {
+export function segmentText(s: WalkSegment, i: I18n, pref: Preference, first: boolean, withShade = true): string {
   const { t, name, lang } = i;
   const parts: string[] = [];
   if (!first && s.turn && s.turn !== 'straight') parts.push(t(`turn_${s.turn}` as Key));
@@ -18,7 +18,7 @@ export function segmentText(s: WalkSegment, i: I18n, pref: Preference, first: bo
   if (s.steep) extras.push(t('steep'));
   if (s.kerb) extras.push(t('kerb'));
   if (s.signals) extras.push(t('signals', { n: s.signals }));
-  if (!s.shelter) extras.push(shadeWord(s, i));
+  if (!s.shelter && withShade) extras.push(shadeWord(s, i));
   // A few metres of stairs or a lift is a step, not a distance.
   const dist = s.metres >= 5 ? metres(s.metres, lang) : '';
   if (lang === 'ja') {

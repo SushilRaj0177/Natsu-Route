@@ -397,8 +397,17 @@ a {
 .map-close {
   display: none;
 }
-.layout.map-open .map-close {
-  display: inline-flex;
+@media (max-width: 999px) {
+  .layout.map-open .map-close {
+    display: inline-flex;
+  }
+  .map-panel {
+    bottom: 1.5rem;
+    padding: 0.5rem 0.75rem;
+  }
+  .map-panel .legend {
+    display: none;
+  }
 }
 
 /* ------------------------------------------------------------ cards */
@@ -777,6 +786,7 @@ a {
 }
 .option-times {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   gap: 0.4rem;
   font-size: 1.7rem;
@@ -788,6 +798,7 @@ a {
 .duration {
   font-size: 1.05rem;
   color: var(--ink-2);
+  white-space: nowrap;
 }
 .exposure {
   display: flex;
@@ -1152,7 +1163,7 @@ a {
 }
 .segment {
   display: grid;
-  grid-template-columns: 2rem 1fr auto;
+  grid-template-columns: 1.6rem minmax(0, 1fr) auto;
   gap: 0.5rem;
   align-items: start;
   padding: 0.45rem 0.5rem;

@@ -233,7 +233,7 @@ function WalkItem({ leg: l, preference, onFocusPoint }: { leg: WalkLeg; preferen
               <span className="seg-icon">
                 <Icon name={s.stairs ? 'stairs' : s.elevator ? 'elevator' : k > 0 && s.turn ? TURN_ICON[s.turn] ?? 'arrowUp' : 'arrowUp'} size={22} />
               </span>
-              <span className="seg-text">{segmentText(s, i18n, preference, k === 0)}</span>
+              <span className="seg-text">{segmentText(s, i18n, preference, k === 0, false)}</span>
               <span className="seg-shade" aria-hidden>
                 {s.shelter ? t(s.shelter as Key) : shadeWord(s, i18n)}
               </span>
