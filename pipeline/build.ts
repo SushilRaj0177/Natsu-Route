@@ -33,7 +33,7 @@ import {
 import { fromChained, fromTrainTimetable, linkInferred, linkPublished, validTimes, withoutPassPoints, type DraftTrip } from './lib/trips.ts';
 import { TrackGraph } from './lib/geometry.ts';
 import { BUS_OPERATORS, loadBus } from './lib/bus.ts';
-import { romaji } from './lib/romaji.ts';
+import { romaji } from '../src/shared/romaji.ts';
 import { distance } from './lib/geo.ts';
 import type {
   CalendarInfo,

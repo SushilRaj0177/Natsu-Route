@@ -198,6 +198,33 @@ export class ShadeEngine {
     return transmit;
   }
 
+  /** Calls fn once for every caster whose bounding box meets the box. */
+  forEachInBox(minX: number, minY: number, maxX: number, maxY: number, fn: (i: number) => void): void {
+    const ax = Math.max(0, Math.floor((minX - this.x0) / CELL));
+    const ay = Math.max(0, Math.floor((minY - this.y0) / CELL));
+    const bx = Math.min(this.nx - 1, Math.floor((maxX - this.x0) / CELL));
+    const by = Math.min(this.ny - 1, Math.floor((maxY - this.y0) / CELL));
+    const stamp = ++this.stamp;
+    const c = this.c;
+    for (let y = ay; y <= by; y++)
+      for (let x = ax; x <= bx; x++) {
+        const k = y * this.nx + x;
+        for (let j = this.cellStart[k], end = this.cellStart[k + 1]; j < end; j++) {
+          const i = this.cellItems[j];
+          if (this.seen[i] === stamp) continue;
+          this.seen[i] = stamp;
+          const b = 4 * i;
+          if (c.bbox[b + 2] < minX || c.bbox[b] > maxX || c.bbox[b + 3] < minY || c.bbox[b + 1] > maxY) continue;
+          fn(i);
+        }
+      }
+  }
+
+  /** Tallest caster near a point (about 1 km around). */
+  heightNear(x: number, y: number): number {
+    return this.tallestNear(x, y);
+  }
+
   /** Is (x, y) inside a building outline? Used to keep pavement samples out of walls. */
   insideBuilding(x: number, y: number): boolean {
     const cx = Math.floor((x - this.x0) / CELL);

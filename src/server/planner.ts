@@ -112,6 +112,11 @@ interface Built {
 export class Planner {
   constructor(private d: PlannerDeps) {}
 
+  /** Live delays, once the poller is running. */
+  attachLive(live: LiveData) {
+    this.d.live = live;
+  }
+
   async plan(query: PlanQuery): Promise<PlanResponse> {
     const q = {
       speed: clamp(query.speed ?? 1.0, 0.5, 1.6),
