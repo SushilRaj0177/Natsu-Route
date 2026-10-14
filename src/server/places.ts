@@ -32,9 +32,10 @@ export function fold(s: string): string {
   return s
     .normalize('NFKC')
     .toLowerCase()
+    // Before the kana shift, which would turn ヶ and ヵ into small hiragana: 霞ヶ関 = 霞ケ関.
+    .replace(/[ヶヵ]/g, 'け')
     .replace(/[ァ-ヶ]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0x60))
-    .replace(/[\s・\-‐ー'’.,()（）]/g, '')
-    .replace(/[ヶヵ]/g, 'け');
+    .replace(/[\s・\-‐ー'’.,()（）]/g, '');
 }
 
 /** Romaji key: "Shin-Okubo" and "しんおおくぼ" both become "shinokubo". */
